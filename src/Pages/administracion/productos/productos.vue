@@ -1,17 +1,14 @@
 <template>
-    <div class="card">
-        <div class="greetings card-body">
-            <h2>
-                Productos
-            </h2>
-    
-            <DataTable
-                :columns="columns"
-                :data = "data"
-                class="table table-hover w-50"            
-            />
-        </div>
-    </div>
+
+        <h2>
+            Productos
+        </h2>
+
+        <DataTable
+            :columns="columns"
+            :data = "data"
+            class="table table-hover w-50"            
+        />
 </template>
 
 <script>
