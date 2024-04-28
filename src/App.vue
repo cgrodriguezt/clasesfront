@@ -1,42 +1,16 @@
-<script setup>
-import productos from './Pages/administracion/productos/productos.vue';
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-  </header>
-
-  <main>
-    <productos />
-  </main>
+  <div class="w-75">
+    <div class="d-flex w-100 align-content-center justify-content-center">
+      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+    </div>
+    <div>
+      <productos />
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+<script setup>
+import productos from './Pages/administracion/productos/productos.vue';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+</script>
