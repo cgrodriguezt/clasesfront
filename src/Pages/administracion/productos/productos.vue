@@ -47,7 +47,17 @@ export default {
 
                     return mensaje;
                 }
-            }
+            },
+            {
+                title: "<span class='text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0'>Acciones</span>",
+                data: "amount",
+                className: "text-center",
+                render: function(data) {
+                    let activar = `<button type="button" class="btn btn-success">Success</button>`;
+
+                    return activar;
+                }
+            },
         ];
 
         onMounted(async() => {
