@@ -25,15 +25,15 @@
                                 <a href="/productos" class="nav-link px-0"> <span class="d-none d-sm-inline">Productos</span></a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Roles</span></a>
+                                <a href="/roles" class="nav-link px-0"> <span class="d-none d-sm-inline">Roles</span></a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Usuarios</span></a>
+                                <a href="/usuarios" class="nav-link px-0"> <span class="d-none d-sm-inline">Usuarios</span></a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
+                        <a href="/movimientos" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Movimientos</span></a>
                     </li>
                 </ul>
