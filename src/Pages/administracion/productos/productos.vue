@@ -1,18 +1,23 @@
 <template>
-
-        <h2>
-            Productos
-        </h2>
+        <div class="d-flex justify-content-between" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <h2>
+                Productos
+            </h2>
+            <button class="btn btn-primary">Crear Producto</button>
+        </div>
 
         <DataTable
             :columns="columns"
             :data = "data"
             class="table table-hover w-50"            
         />
+
+        <ModalProductosVue @saved="reloadDatatable"></ModalProductosVue>
 </template>
 
 <script>
 import axios from 'axios';
+import ModalProductosVue from '../../../components/productos/ModalProductos.vue'
 import { onMounted, ref } from 'vue';
 import DataTable from 'datatables.net-vue3'
 import Select from 'datatables.net-select';
@@ -23,7 +28,8 @@ DataTable.use(Select);
 export default {
     name: "productos-listing",
     components: {
-        DataTable
+        DataTable,
+        ModalProductosVue
     },
     setup(){
         const data = ref([]);
@@ -43,7 +49,7 @@ export default {
                 data: "state",
                 className: "text-center",
                 render: function(data) {
-                    let mensaje = (data == 1) ? `<div class="alert alert-success" role="alert">Activo</div>` : `<div class="alert alert-danger" role="alert">Inactivo</div>`;
+                    let mensaje = (data == 'A') ? `<div class="alert alert-success" role="alert">Activo</div>` : `<div class="alert alert-danger" role="alert">Inactivo</div>`;
 
                     return mensaje;
                 }
@@ -60,18 +66,28 @@ export default {
             },
         ];
 
-        onMounted(async() => {
+        const reloadDataTable = async () => {
+            
+            await dataTable();
+        };
+
+        const dataTable = async () => {
             try {
                 let response = await axios.get('http://localhost:8080/productos/todos');
                 data.value = response.data; 
             } catch (error) {
                 console.error("Error Al Obtener los productos: ", error);
             }
+        }
+
+        onMounted(async() => {
+            dataTable();
         });
 
         return {
             data,
-            columns
+            columns,
+            reloadDataTable
         }
     }
 }
