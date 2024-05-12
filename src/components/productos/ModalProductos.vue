@@ -16,6 +16,15 @@
                         <label for="amount" class="form-label">stock</label>
                         <input type="text" class="form-control" id="amount" v-model="productos.amount">
                     </div>
+                    <div class="mb-3">
+                        <label for="selectPrueba" class="form-label">Productos Prueba</label>
+                        <select v-model="productos.productos" id="selectPrueba">
+                            <option disabled value="">Please select one</option>
+                            <option v-for="producto in productsPrueba" v-bind:value="producto.id" v-bind:key="producto.id">
+                                {{ producto.name }} - {{ producto.amount }}
+                            </option>                          
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -28,7 +37,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { Modal } from 'bootstrap';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -37,7 +46,13 @@ export default defineComponent({
     name: 'modal-products',
     setup(props, { emit }) {
         const productos = {};
-        const modalProductos = ref(null)
+        const modalProductos = ref(null);
+        let productsPrueba = ref({});
+
+        onMounted(async() => {
+            let response = await axios.get('http://localhost:8080/productos/todos');
+            productsPrueba.value = response.data;
+        });
 
         const guardar = async() => {
             console.log(productos, productos.value)
@@ -75,7 +90,8 @@ export default defineComponent({
         return {
             guardar,
             productos,
-            modalProductos
+            modalProductos,
+            productsPrueba
         }
     }
 })
