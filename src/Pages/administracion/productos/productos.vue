@@ -14,7 +14,7 @@
         />
     </div>
 
-        <ModalProductosVue @saved="reloadDatatable"></ModalProductosVue>
+        <ModalProductosVue v-bind:products="products" @saved="dataTable"></ModalProductosVue>
 </template>
 
 <script>
@@ -37,6 +37,7 @@ export default {
     },
     setup(){
         const data = ref([]);
+        let products = ref({});
         const columns = [
             {
                 title: "<span class='text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0'>Nombre</span>",
@@ -69,7 +70,11 @@ export default {
                             <i class="button bi bi-shield-fill-x"></i>
                         </a>`;
 
-                    return activar;
+                        let editar = `<a href="javascript:void(0)" data-id="${full.id}" data-nombre="${full.name}" data-amount="${full.amount}" data-action="editar" title="Editar" class="btn btn-primary button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="bi bi-pencil-square button"></i>
+                    </a>`;
+
+                    return `<div class="btn-group">${activar}${editar}</div>`;
                 }
             },
         ];
@@ -81,12 +86,11 @@ export default {
             if(target.classList.contains('button')){
                 let dataEdit = (target.parentNode.tagName == 'A') ? target.parentNode.dataset : target.dataset;
 
-                switchCase(dataEdit.action, dataEdit.id);
+                switchCase(dataEdit.action, dataEdit.id, dataEdit.nombre, dataEdit.amount);
             }
         }
 
         const reloadDataTable = async () => {
-            
             await dataTable();
         };
 
@@ -99,11 +103,16 @@ export default {
             }
         }; 
 
-        const switchCase = (action, id) => {
+        const switchCase = (action, id, nombre, amount) => {
             switch (action) {
                 case 'estado':
                     return cambiarEstado(id);
-            
+                case 'editar':
+                    products.value.id = id;
+                    products.value.name = nombre;
+                    products.value.amount = amount;
+                    products.value.action = action;
+                    break;            
                 default:
                     break;
             }
@@ -153,8 +162,10 @@ export default {
 
         return {
             data,
+            products,
             columns,
             reloadDataTable,
+            dataTable,
             getAction
         }
     }

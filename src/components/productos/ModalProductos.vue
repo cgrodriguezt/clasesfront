@@ -16,15 +16,6 @@
                         <label for="amount" class="form-label">stock</label>
                         <input type="text" class="form-control" id="amount" v-model="productos.amount">
                     </div>
-                    <div class="mb-3">
-                        <label for="selectPrueba" class="form-label">Productos Prueba</label>
-                        <select v-model="productos.productos" id="selectPrueba">
-                            <option disabled value="">Please select one</option>
-                            <option v-for="producto in productsPrueba" v-bind:value="producto.id" v-bind:key="producto.id">
-                                {{ producto.name }} - {{ producto.amount }}
-                            </option>                          
-                        </select>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -37,28 +28,40 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, watchEffect } from 'vue';
 import { Modal } from 'bootstrap';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
 export default defineComponent({
     name: 'modal-products',
+    props:{
+        products: {}
+    },
     setup(props, { emit }) {
-        const productos = {};
+        const productos = ref({});
         const modalProductos = ref(null);
-        let productsPrueba = ref({});
+        const action = ref('');
 
-        onMounted(async() => {
-            let response = await axios.get('http://localhost:8080/productos/todos');
-            productsPrueba.value = response.data;
+        // const onModalShown = (async () => {
+        //     productos.value = { ...props.products };
+        // })
+        
+        // onMounted(async() => {
+        //     modalProductos.value.addEventListener('shown.bs.modal', onModalShown);
+        // });
+
+        watchEffect(() => {
+            productos.value = { ...props.products };
+            productos.value.edit = (props.products.action == 'editar');
         });
-
+        
         const guardar = async() => {
-            console.log(productos, productos.value)
+            let ruta = (props.products.action == 'editar') ? `editar/${props.products.id}` : 'crear';
+            let peticion = (props.products.action == 'editar') ? axios.put : axios.post;
             try {
-                let response = await axios.post('http://localhost:8080/productos/crear', productos);
-                console.log(response);
+                let response = await peticion(`http://localhost:8080/productos/${ruta}`, productos.value);
+
                 Swal.fire({
                     title: response.data.message.title,
                     text: response.data.message.description,
@@ -71,7 +74,7 @@ export default defineComponent({
             } catch (error) {
                 Swal.fire({
                     title: 'Error',
-                    text: error.message,
+                    text: error.message.description,
                     icon: "error"
                 });
             }
@@ -90,8 +93,7 @@ export default defineComponent({
         return {
             guardar,
             productos,
-            modalProductos,
-            productsPrueba
+            modalProductos
         }
     }
 })
